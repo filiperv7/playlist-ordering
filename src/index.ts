@@ -15,15 +15,12 @@ const playlist = () => {
   let head: Node
   let tail: Node
   let playlist: Node[] = []
-  let length: number = 0
 
   const addMusic = (node: Node) => {
     if (!head) {
       head = node
       tail = head
       playlist.push(node)
-
-      length++
 
       return head
     }
@@ -34,20 +31,17 @@ const playlist = () => {
 
     playlist.push(tail)
 
-    length++
-
     return tail
   }
 
   return {
-    length: () => length,
+    length: () => playlist.length,
     printPlaylist: () => playlist,
     addMusic: (node: Node) => addMusic(node)
   }
 }
 
 const rockPlaylist = playlist()
-
 rockPlaylist.addMusic({
   data: { name: 'Gonner', duration: 20000, singer: '21Pilots' },
   id: '1',
