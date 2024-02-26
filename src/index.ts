@@ -6,9 +6,9 @@ interface Music {
 
 interface Node {
   data: Music
-  id: string
-  prev: string | null
-  next: string | null
+  id: number
+  prev: number | null
+  next: number | null
 }
 
 const playlist = () => {
@@ -16,15 +16,24 @@ const playlist = () => {
   let tail: Node
   let playlist: Node[] = []
 
-  const addMusic = (node: Node) => {
+  const addMusic = (music: Music) => {
+    let node: Node = {
+      data: music,
+      id: 0,
+      prev: null,
+      next: null
+    }
+
     if (!head) {
       head = node
+      head.id = 1
       tail = head
       playlist.push(node)
 
       return head
     }
 
+    node.id = tail.id + 1
     tail.next = node.id
     node.prev = tail.id
     tail = node
@@ -34,53 +43,50 @@ const playlist = () => {
     return tail
   }
 
+  const getById = (id: number) => {
+    if (playlist.length === 0) {
+      return 'Playlist is empty'
+    }
+
+    for (let music of playlist) {
+      if (music.id === id) {
+        return music
+      }
+    }
+
+    return "The music doesn't exist"
+  }
+
   return {
     length: () => playlist.length,
     printPlaylist: () => playlist,
-    addMusic: (node: Node) => addMusic(node)
+    addMusic: (music: Music) => addMusic(music),
+    getById: (id: number) => getById(id)
   }
 }
 
 const rockPlaylist = playlist()
+rockPlaylist.addMusic({ name: 'Goner', duration: 20000, singer: '21Pilots' })
+
 rockPlaylist.addMusic({
-  data: { name: 'Gonner', duration: 20000, singer: '21Pilots' },
-  id: '1',
-  prev: null,
-  next: null
+  name: 'Águas Purificadoras',
+  duration: 80000,
+  singer: 'Diante do Trono'
 })
 
 rockPlaylist.addMusic({
-  data: {
-    name: 'Águas Purificadoras',
-    duration: 80000,
-    singer: 'Diante do Trono'
-  },
-  id: '2',
-  prev: null,
-  next: null
+  name: 'Único',
+  duration: 300000,
+  singer: 'Marco Telles'
 })
 
 rockPlaylist.addMusic({
-  data: {
-    name: 'Único',
-    duration: 300000,
-    singer: 'Marco Telles'
-  },
-  id: '3',
-  prev: null,
-  next: null
+  name: 'GOOD MUSIC',
+  duration: 134000,
+  singer: 'HOLYGHOST MADNESS'
 })
 
-rockPlaylist.addMusic({
-  data: {
-    name: 'GOOD MUSIC',
-    duration: 134000,
-    singer: 'HOLYGHOST MADNESS'
-  },
-  id: '4',
-  prev: null,
-  next: null
-})
+console.log(rockPlaylist.getById(2))
 
-console.log(`Length: ${rockPlaylist.length()}`)
+console.log(`\nLength: ${rockPlaylist.length()} \n`)
 console.log(rockPlaylist.printPlaylist())
